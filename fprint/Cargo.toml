@@ -12,4 +12,4 @@ elanfp-ipc = { path = "../ipc" }
 async-lock = "3.4"
 blocking = "1.6"
 libc = "0.2.191"
-zbus = "5.19"
+zbus = "6.3"

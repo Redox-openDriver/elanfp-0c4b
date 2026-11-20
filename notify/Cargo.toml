@@ -10,4 +10,4 @@ repository.workspace = true
 elanfp-engine = { path = "../engine" }
 elanfp-ipc = { path = "../ipc" }
 libc = "0.2.191"
-zbus = "5.19"
+zbus = "6.3"
