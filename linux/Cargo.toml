@@ -1,0 +1,24 @@
+[package]
+name = "elanfp-linux"
+version = "0.1.0"
+description = "elanfp для Linux: служба elanfpd, CLI elanfp и инструменты датасета"
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[features]
+default = ["aes-256-gcm-siv"]
+aes-256-gcm-siv = ["elanfp-engine/aes-256-gcm-siv"]
+xchacha20-poly1305 = ["elanfp-engine/xchacha20-poly1305"]
+aes-256-gcm = ["elanfp-engine/aes-256-gcm"]
+
+[dependencies]
+elanfp-core = { path = "../core" }
+elanfp-engine = { path = "../engine", default-features = false }
+elanfp-ipc = { path = "../ipc" }
+nusb = "0.2"
+zeroize = "1.9.2"
+libc = "0.2.191"
+
+[dev-dependencies]
+drv-i18n = { git = "https://github.com/Redox-openDriver/drv-i18n", tag = "v0.1.0" }

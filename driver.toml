@@ -1,0 +1,98 @@
+schema = 3
+
+[driver]
+id = "elanfp-0c4b"
+family = "elanfp"
+name = "elanfp"
+category = "fingerprint"
+status = "beta"
+version = "0.1.0"
+license = "AGPL-3.0-or-later"
+repository = "https://github.com/Redox-openDriver/elanfp-0c4b"
+keywords = ["fingerprint", "ELAN", "04f3:0c4b", "PAM", "sudo", "fprintd", "biometrics", "Lenovo", "ThinkBook", "Redox"]
+default_language = "ru"
+
+[tags]
+vendor = ["elan"]
+class = ["fingerprint"]
+device = ["usb:04f3:0c4b"]
+sensor = ["image", "capacitive", "match-on-host", "80x80"]
+bus = ["usb"]
+os = ["linux", "redox"]
+arch = ["x86_64"]
+libc = ["glibc", "musl"]
+init = ["systemd", "openrc", "runit", "dinit", "s6"]
+integration = ["pam", "fprintd", "polkit", "d-bus", "tpm2"]
+desktop = ["kde", "gnome"]
+laptop = ["lenovo-thinkbook-16-g6-abp-21kk"]
+language = ["ru", "en"]
+
+[text.ru]
+title = "Открытый драйвер сканера отпечатков ELAN"
+summary = "Вход и подтверждение sudo отпечатком пальца на ноутбуках со сканером ELAN 04f3:0c4b — без закрытых библиотек."
+description = """
+elanfp работает со сканером отпечатков ELAN 04f3:0c4b (сенсор 80×80, сравнение на стороне компьютера).
+Он регистрирует палец, проверяет касание и подключается к sudo, входу в систему и настройкам рабочего стола.
+Распознавание — открытая библиотека papilla, шаблоны хранятся только зашифрованными, ключ защищён TPM там, где он есть.
+Если отпечаток не узнан или сканер недоступен, всегда остаётся обычный пароль.
+"""
+disclaimer = "Независимый открытый проект. Не связан с ELAN Microelectronics; название ELAN указано только для обозначения совместимого устройства."
+features = [
+  "регистрация пальца с подсказками, заканчивается сама",
+  "проверка с двух попыток, дообучение на уверенных касаниях",
+  "отбраковка плохих кадров: частичное касание, мокрый палец, движение",
+  "шифрование шаблонов (AES-256-GCM-SIV по умолчанию), ключ в TPM",
+  "sudo, вход и блокировщики через PAM; настройки KDE и GNOME через интерфейс fprintd",
+  "блокировка после 5 неудач с растущим сроком, пароль всегда остаётся запасным путём",
+  "systemd, OpenRC, runit, dinit, s6; glibc и musl",
+  "работает только с проверенным вариантом сенсора на встроенном порту",
+]
+
+[text.en]
+title = "Open driver for the ELAN fingerprint reader"
+summary = "Log in and confirm sudo with a fingerprint on laptops with the ELAN 04f3:0c4b reader — no proprietary libraries."
+description = """
+elanfp drives the ELAN 04f3:0c4b fingerprint reader (an 80×80 sensor, matching happens on the host).
+It enrolls a finger, verifies a touch and plugs into sudo, login and the desktop's fingerprint settings.
+Recognition is done by the open papilla library, templates are stored encrypted, the key is protected by the TPM where there is one.
+When the finger is not recognised or the reader is unavailable, the ordinary password always remains.
+"""
+disclaimer = "An independent open project. Not affiliated with ELAN Microelectronics; the ELAN name only identifies the compatible device."
+features = [
+  "guided enrollment that finishes by itself",
+  "two verification attempts, adaptation on confident touches",
+  "bad frames are rejected: partial touch, wet finger, motion",
+  "encrypted templates (AES-256-GCM-SIV by default), key in the TPM",
+  "sudo, login and screen lockers through PAM; KDE and GNOME settings through the fprintd interface",
+  "lockout after 5 failures that grows on repeat, the password always remains as the fallback",
+  "systemd, OpenRC, runit, dinit, s6; glibc and musl",
+  "works only with the verified sensor variant on the built-in port",
+]
+
+[[device]]
+bus = "usb"
+vendor_id = "04f3"
+product_id = "0c4b"
+vendor = "ELAN Microelectronics"
+model = "ELAN:Fingerprint"
+kind = "image sensor 80x80, capacitive, match on host"
+verified_firmware = ["26.30"]
+laptops = ["Lenovo ThinkBook 16 G6 ABP (21KK)"]
+
+[platform.linux]
+status = "beta"
+components = ["elanfpd", "elanfp", "pam_elanfp.so", "elanfp-fprintd"]
+requirements = ["Linux-PAM", "TPM 2.0 with systemd-creds (optional)", "D-Bus and polkit (optional, for desktop settings)"]
+
+[platform.redox]
+status = "alpha"
+components = ["elanfpd", "elanfp"]
+requirements = ["xhcid"]
+
+[links]
+readme = "README.md"
+protocol = "PROTOCOL.md"
+security = "SECURITY.md"
+roadmap = "ROADMAP.md"
+matcher = "https://github.com/Redox-openDriver/papilla"
+messages = "https://github.com/Redox-openDriver/drv-i18n"

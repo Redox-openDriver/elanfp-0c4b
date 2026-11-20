@@ -1,0 +1,1 @@
+SUBSYSTEM=="usb", ATTR{idVendor}=="04f3", ATTR{idProduct}=="0c4b", ATTR{removable}=="fixed", ATTR{port/connect_type}=="hardwired", GROUP="elanfp", MODE="0660", ATTR{power/control}="on"

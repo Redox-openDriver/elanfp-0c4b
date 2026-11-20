@@ -1,0 +1,42 @@
+[package]
+name = "elanfp-redox"
+version = "0.1.0"
+description = "elanfp для Redox OS: транспорт через xhcid и служба-схема fingerprint.elanfp"
+edition = "2024"
+license = "AGPL-3.0-or-later"
+repository = "https://github.com/Redox-openDriver/elanfp-0c4b"
+publish = false
+
+[workspace]
+
+[features]
+default = ["aes-256-gcm-siv"]
+aes-256-gcm-siv = ["elanfp-engine/aes-256-gcm-siv"]
+xchacha20-poly1305 = ["elanfp-engine/xchacha20-poly1305"]
+aes-256-gcm = ["elanfp-engine/aes-256-gcm"]
+simulator = ["elanfp-engine/simulator"]
+
+[dependencies]
+elanfp-core = { path = "../core" }
+elanfp-engine = { path = "../engine", default-features = false }
+elanfp-ipc = { path = "../ipc" }
+libredox = "0.2"
+redox_event = "0.5"
+redox-scheme = { git = "https://gitlab.redox-os.org/redox-os/redox-scheme.git", default-features = false, features = ["std"] }
+redox_syscall = { version = "0.9.5", features = ["std"] }
+libc = "0.2"
+xhcid = { git = "https://gitlab.redox-os.org/redox-os/base.git", rev = "8f576d27ee5d028157b001e320affc7b1ec2736b" }
+zeroize = "1.9.2"
+
+[[bin]]
+name = "elanfpd"
+path = "src/bin/elanfpd.rs"
+
+[[bin]]
+name = "elanfp"
+path = "src/bin/elanfp.rs"
+
+[[test]]
+name = "scheme"
+path = "tests/scheme.rs"
+required-features = ["simulator"]

@@ -1,0 +1,12 @@
+[package]
+name = "elanfp-ipc"
+version = "0.1.0"
+description = "Протокол между elanfpd и его клиентами; стандартная библиотека, на Linux ещё libc для сокета"
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+
+[target.'cfg(target_os = "linux")'.dependencies]
+libc = "0.2.191"

@@ -1,0 +1,15 @@
+[package]
+name = "elanfp-fprintd"
+version = "0.1.0"
+description = "Мост D-Bus net.reactivated.Fprint: настройки рабочих столов и pam_fprintd поверх elanfpd"
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+elanfp-engine = { path = "../engine" }
+elanfp-ipc = { path = "../ipc" }
+async-lock = "3.4"
+blocking = "1.6"
+libc = "0.2.191"
+zbus = "5.19"

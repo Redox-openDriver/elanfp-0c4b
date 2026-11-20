@@ -1,0 +1,15 @@
+[package]
+description = "Open-source driver for the ELAN 04f3:0c4b fingerprint reader"
+
+[source]
+git = "https://github.com/Redox-openDriver/elanfp-0c4b"
+
+[build]
+template = "custom"
+script = """
+DYNAMIC_INIT
+COOKBOOK_CARGO_PATH=redox cookbook_cargo
+mkdir -pv "${COOKBOOK_STAGE}/usr/lib/drivers" "${COOKBOOK_STAGE}/usr/lib/xhcid.d"
+mv -v "${COOKBOOK_STAGE}/usr/bin/elanfpd" "${COOKBOOK_STAGE}/usr/lib/drivers/elanfpd"
+cp -v "${COOKBOOK_SOURCE}/redox/dist/xhcid.d/elanfp.toml" "${COOKBOOK_STAGE}/usr/lib/xhcid.d/elanfp.toml"
+"""

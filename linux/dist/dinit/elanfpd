@@ -1,0 +1,6 @@
+type = process
+command = /usr/local/bin/elanfpd
+run-as = elanfp
+restart = true
+smooth-recovery = true
+depends-on = elanfpd-dirs

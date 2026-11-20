@@ -1,0 +1,9 @@
+[package]
+name = "elanfp-core"
+version = "0.1.0"
+description = "Протокол сканера отпечатка ELAN 04f3:0c4b — без привязки к ОС"
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]

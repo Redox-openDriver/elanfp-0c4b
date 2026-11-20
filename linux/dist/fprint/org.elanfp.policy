@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE policyconfig PUBLIC "-//freedesktop//DTD PolicyKit Policy Configuration 1.0//EN" "http://www.freedesktop.org/standards/PolicyKit/1.0/policyconfig.dtd">
+<policyconfig>
+  <vendor>elanfp</vendor>
+  <action id="org.elanfp.verify">
+    <description>Verify a fingerprint</description>
+    <description xml:lang="ru">Проверка отпечатка пальца</description>
+    <message>Authentication is required to verify a fingerprint</message>
+    <message xml:lang="ru">Для проверки отпечатка нужна аутентификация</message>
+    <defaults>
+      <allow_any>no</allow_any>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>yes</allow_active>
+    </defaults>
+    <annotate key="org.freedesktop.policykit.owner">unix-user:elanfp-fprint</annotate>
+  </action>
+  <action id="org.elanfp.enroll">
+    <description>Enroll or delete your fingerprints</description>
+    <description xml:lang="ru">Регистрация и удаление своих отпечатков</description>
+    <message>Enter your password to change your fingerprints</message>
+    <message xml:lang="ru">Введите свой пароль, чтобы изменить свои отпечатки</message>
+    <defaults>
+      <allow_any>no</allow_any>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>auth_self</allow_active>
+    </defaults>
+    <annotate key="org.freedesktop.policykit.owner">unix-user:elanfp-fprint</annotate>
+  </action>
+  <action id="org.elanfp.others">
+    <description>Manage fingerprints of another user</description>
+    <description xml:lang="ru">Управление отпечатками другого пользователя</description>
+    <message>Administrator authentication is required to manage fingerprints of another user</message>
+    <message xml:lang="ru">Для управления отпечатками другого пользователя нужен пароль администратора</message>
+    <defaults>
+      <allow_any>no</allow_any>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>auth_admin</allow_active>
+    </defaults>
+    <annotate key="org.freedesktop.policykit.owner">unix-user:elanfp-fprint</annotate>
+  </action>
+</policyconfig>

@@ -1,0 +1,6 @@
+type = process
+command = /usr/local/bin/elanfp-fprintd
+run-as = elanfp-fprint
+restart = true
+smooth-recovery = true
+depends-on = elanfpd

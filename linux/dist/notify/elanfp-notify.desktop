@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=Application
+Name=elanfp-notify
+Exec=/usr/local/bin/elanfp-notify
+NoDisplay=true
+X-GNOME-Autostart-enabled=true

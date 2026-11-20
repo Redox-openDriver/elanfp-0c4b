@@ -1,0 +1,7 @@
+[[drivers]]
+name = "ELAN 04f3:0c4b fingerprint reader"
+class = 255
+subclass = 0
+protocol = 0
+ids = { 0x04f3 = [0x0c4b] }
+command = ["elanfpd", "$SCHEME", "$PORT", "$IF_NUM"]

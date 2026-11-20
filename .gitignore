@@ -1,0 +1,10 @@
+target/
+captures/
+images/
+refs/
+*.raw
+*.pgm
+*.pcap
+*.papl
+*.papv
+*.cred

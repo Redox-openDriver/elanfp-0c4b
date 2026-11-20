@@ -1,0 +1,12 @@
+#!/sbin/openrc-run
+
+description="elanfp desktop bridge (net.reactivated.Fprint)"
+command="/usr/local/bin/elanfp-fprintd"
+command_user="elanfp-fprint:elanfp-fprint"
+supervisor="supervise-daemon"
+respawn_delay=2
+respawn_max=0
+
+depend() {
+	need dbus elanfpd
+}

@@ -1,0 +1,13 @@
+[package]
+name = "elanfp-notify"
+version = "0.1.0"
+description = "Показывает в сеансе рабочего стола, что у службы elanfpd запросили отпечаток хозяина"
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+elanfp-engine = { path = "../engine" }
+elanfp-ipc = { path = "../ipc" }
+libc = "0.2.191"
+zbus = "5.19"

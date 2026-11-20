@@ -1,0 +1,15 @@
+[package]
+name = "pam-elanfp"
+version = "0.1.0"
+description = "PAM-модуль: вход и sudo по отпечатку через службу elanfpd"
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[lib]
+name = "pam_elanfp"
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+elanfp-ipc = { path = "../ipc" }
+libc = "0.2.191"

@@ -1,0 +1,18 @@
+#!/sbin/openrc-run
+
+description="elanfp fingerprint service (ELAN 04f3:0c4b)"
+command="/usr/local/bin/elanfpd"
+command_user="elanfp:elanfp"
+supervisor="supervise-daemon"
+respawn_delay=2
+respawn_max=0
+
+depend() {
+	need localmount
+	after udev udev-trigger
+}
+
+start_pre() {
+	checkpath --directory --owner elanfp:elanfp --mode 0755 /run/elanfp
+	checkpath --directory --owner elanfp:elanfp --mode 0700 /var/lib/elanfp
+}
