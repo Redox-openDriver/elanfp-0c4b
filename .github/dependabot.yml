@@ -1,9 +1,12 @@
 version: 2
 updates:
   - package-ecosystem: cargo
-    directories: ["/", "/redox"]
+    directory: /
     schedule:
       interval: weekly
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
     groups:
       cargo:
         patterns: ["*"]
