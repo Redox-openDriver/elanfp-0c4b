@@ -392,7 +392,7 @@ mod tests {
     fn a_finger_held_past_the_lift_limit_is_not_taken_for_a_new_touch() {
         let mut report = Recorder::default();
         let mut fake = FakeSensor::with_touches(&[4, 4]);
-        fake.held_on_release = 1_000_000;
+        fake.held_on_release = usize::MAX;
         let log = fake.log.clone();
         let mut session = open(fake, &mut report);
         assert!(matches!(session.touch(&mut report, Duration::from_secs(5)).unwrap(), Touch::Accepted { .. }));
