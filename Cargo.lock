@@ -367,8 +367,8 @@ dependencies = [
 
 [[package]]
 name = "drv-i18n"
-version = "0.1.0"
-source = "git+https://github.com/Redox-openDriver/drv-i18n?tag=v0.1.0#a5bdbea246379d76a41022b6dc2b924375301f82"
+version = "0.1.1"
+source = "git+https://github.com/Redox-openDriver/drv-i18n?tag=v0.1.1#dd61d1c09785c7fb115b070120c54b1775678378"
 dependencies = [
  "fluent-bundle",
  "unic-langid",
@@ -376,11 +376,11 @@ dependencies = [
 
 [[package]]
 name = "elanfp-core"
-version = "0.1.0"
+version = "0.1.1"
 
 [[package]]
 name = "elanfp-engine"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "drv-i18n",
  "elanfp-core",
@@ -391,7 +391,7 @@ dependencies = [
 
 [[package]]
 name = "elanfp-fprintd"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "async-lock",
  "blocking",
@@ -403,14 +403,14 @@ dependencies = [
 
 [[package]]
 name = "elanfp-ipc"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "libc",
 ]
 
 [[package]]
 name = "elanfp-linux"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "drv-i18n",
  "elanfp-core",
@@ -423,7 +423,7 @@ dependencies = [
 
 [[package]]
 name = "elanfp-notify"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "elanfp-engine",
  "elanfp-ipc",
@@ -768,7 +768,7 @@ dependencies = [
 
 [[package]]
 name = "pam-elanfp"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "elanfp-ipc",
  "libc",
@@ -776,8 +776,8 @@ dependencies = [
 
 [[package]]
 name = "papilla"
-version = "0.1.0"
-source = "git+https://github.com/Redox-openDriver/papilla?tag=v0.1.0#327bb3de34d90854d34075cde3f8944054575e35"
+version = "0.1.1"
+source = "git+https://github.com/Redox-openDriver/papilla?tag=v0.1.1#0d6c09c44194de9e3a44b190a92912f70fa62728"
 dependencies = [
  "aes",
  "aes-gcm",

@@ -1,6 +1,6 @@
 [package]
 name = "elanfp-engine"
-version = "0.1.0"
+version = "0.1.1"
 description = "elanfp: касания, регистрация, проверка и хранилище шаблонов — без привязки к ОС"
 edition.workspace = true
 license.workspace = true
@@ -16,6 +16,6 @@ simulator = []
 [dependencies]
 elanfp-core = { path = "../core" }
 elanfp-ipc = { path = "../ipc" }
-papilla = { git = "https://github.com/Redox-openDriver/papilla", tag = "v0.1.0", default-features = false }
-drv-i18n = { git = "https://github.com/Redox-openDriver/drv-i18n", tag = "v0.1.0" }
+papilla = { git = "https://github.com/Redox-openDriver/papilla", tag = "v0.1.1", default-features = false }
+drv-i18n = { git = "https://github.com/Redox-openDriver/drv-i18n", tag = "v0.1.1" }
 zeroize = "1.9.2"

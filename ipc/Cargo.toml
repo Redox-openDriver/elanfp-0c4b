@@ -1,6 +1,6 @@
 [package]
 name = "elanfp-ipc"
-version = "0.1.0"
+version = "0.1.1"
 description = "Протокол между elanfpd и его клиентами; стандартная библиотека, на Linux ещё libc для сокета"
 edition.workspace = true
 license.workspace = true
