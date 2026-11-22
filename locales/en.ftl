@@ -215,6 +215,8 @@ fprint-no-prints = the user has no enrolled fingers
 fprint-no-action = nothing to stop: no operation is running
 fprint-bad-finger = unknown finger name
 fprint-not-deleted = some prints could not be deleted
+fprint-audit-enroll = uid { $caller } enrolls { $fingers } for uid { $target }
+fprint-audit-delete = uid { $caller } deletes { $fingers } of uid { $target }
 log-touch-dynamics = touch dynamics: uid={ $uid } frames={ $frames } settled in { $settle } ms, held { $held } ms, coverage rise { $rise }, contrast drift { $drift }, motion { $motion }
 dynamics-set = { $set }: touches { $touches }; medians — frames { $frames }, settled in { $settle } ms, held { $held } ms, coverage rise { $rise }, contrast drift { $drift }, motion { $motion }
 fprint-bus-lost = the connection to the D-Bus bus is lost

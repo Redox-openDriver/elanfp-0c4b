@@ -218,6 +218,8 @@ fprint-no-prints = у пользователя нет зарегистриров
 fprint-no-action = нечего останавливать: операция не запущена
 fprint-bad-finger = непонятное имя пальца
 fprint-not-deleted = не все отпечатки удалось удалить
+fprint-audit-enroll = uid { $caller } записывает { $fingers } для uid { $target }
+fprint-audit-delete = uid { $caller } удаляет { $fingers } у uid { $target }
 log-touch-dynamics = динамика касания: uid={ $uid } кадров={ $frames } до устойчивого кадра { $settle } мс, удержание { $held } мс, рост площади { $rise }, изменение контраста { $drift }, движение { $motion }
 dynamics-set = { $set }: касаний { $touches }; медианы — кадров { $frames }, до устойчивого кадра { $settle } мс, удержание { $held } мс, рост площади { $rise }, изменение контраста { $drift }, движение { $motion }
 fprint-bus-lost = соединение с шиной D-Bus потеряно

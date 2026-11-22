@@ -5,7 +5,7 @@ use std::sync::atomic::{AtomicUsize, Ordering};
 use std::sync::{Arc, Mutex, MutexGuard, OnceLock, PoisonError};
 use std::time::Duration;
 
-use elanfp_engine::{BoxError, Catalog, Fail, catalog};
+use elanfp_engine::{BoxError, Catalog, Fail, Msg, catalog};
 use elanfp_ipc::{Event, FINGERS, Request, Verb, standard_finger, uid_of};
 use zbus::fdo::RequestNameFlags;
 use zbus::message::Header;
@@ -51,9 +51,17 @@ pub enum Error {
     PrintsNotDeleted(String),
 }
 
-fn text(key: &str) -> String {
+fn texts() -> &'static Catalog {
     static TEXTS: OnceLock<Catalog> = OnceLock::new();
-    TEXTS.get_or_init(catalog).text(key)
+    TEXTS.get_or_init(catalog)
+}
+
+fn text(key: &str) -> String {
+    texts().text(key)
+}
+
+fn audit(key: &str, caller: u32, target: u32, fingers: &[String]) {
+    eprintln!("{}", texts().render(&Msg::new(key).num("caller", caller).num("target", target).arg("fingers", fingers.join(", "))));
 }
 
 fn not_claimed() -> Error {
@@ -232,6 +240,17 @@ async fn console_belongs_to(connection: &Connection, target: u32) -> zbus::Resul
     Ok(owner == target || session.class().await? == GREETER)
 }
 
+fn console_belongs_to_now(connection: &zbus::blocking::Connection, target: u32) -> zbus::Result<bool> {
+    let seat = SeatProxyBlocking::builder(connection).cache_properties(CacheProperties::No).build()?;
+    let (_, path) = seat.active_session()?;
+    let session = SessionProxyBlocking::builder(connection).path(path)?.cache_properties(CacheProperties::No).build()?;
+    if session.remote()? {
+        return Ok(false);
+    }
+    let (owner, _) = session.user()?;
+    Ok(owner == target || session.class()? == GREETER)
+}
+
 async fn at_the_console(connection: &Connection, settings: &Settings, target: u32) -> bool {
     match settings.console {
         Console::Any => true,
@@ -294,6 +313,13 @@ impl Job {
         lock(&self.state).generation == self.generation
     }
 
+    fn at_the_console(&self) -> bool {
+        match self.settings.console {
+            Console::Any => true,
+            Console::Logind => console_belongs_to_now(&self.connection, self.claim.target).unwrap_or(false),
+        }
+    }
+
     fn attach(&self) -> Link {
         let opened = relay::open(&self.settings.socket, self.settings.service_uid).and_then(|stream| Ok((stream.try_clone()?, stream)));
         let mut state = lock(&self.state);
@@ -327,7 +353,11 @@ impl Job {
             emit(&self.connection, &self.claim.owner, "VerifyFingerSelected", shown, None);
         }
         let mut busy = 0;
+        let mut again = false;
         let status = loop {
+            if std::mem::replace(&mut again, true) && !self.at_the_console() {
+                break Some("verify-unknown-error");
+            }
             let stream = match self.attach() {
                 Link::Open(stream) => stream,
                 Link::Unreachable => break Some("verify-disconnected"),
@@ -625,6 +655,7 @@ impl Device {
             return Err(denied());
         }
         let stored = self.stored(target, ROOT).await?;
+        audit("fprint-audit-delete", caller, target, &stored);
         self.remove(target, stored, None).await
     }
 
@@ -638,6 +669,7 @@ impl Device {
         }
         self.still_holds(&claim)?;
         let stored = self.stored(claim.target, ROOT).await?;
+        audit("fprint-audit-delete", claim.caller, claim.target, &stored);
         self.remove(claim.target, stored, Some(claim)).await
     }
 
@@ -660,6 +692,7 @@ impl Device {
         if stored.is_empty() {
             return Err(Error::NoEnrolledPrints(text("fprint-no-prints")));
         }
+        audit("fprint-audit-delete", claim.caller, claim.target, &stored);
         self.remove(claim.target, stored, Some(claim)).await
     }
 
@@ -737,6 +770,7 @@ impl Device {
         if !allowed(connection, &self.settings, &sender, claim.caller, claim.target, ACTION_ENROLL).await {
             return Err(denied());
         }
+        audit("fprint-audit-enroll", claim.caller, claim.target, &[finger.to_string()]);
         self.start(connection, claim, Kind::Enroll, move |job| job.enroll(finger))
     }
 
