@@ -1,6 +1,6 @@
 [package]
 name = "elanfp-fprintd"
-version = "0.1.1"
+version = "0.1.2"
 description = "Мост D-Bus net.reactivated.Fprint: настройки рабочих столов и pam_fprintd поверх elanfpd"
 edition.workspace = true
 license.workspace = true

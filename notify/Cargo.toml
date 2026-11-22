@@ -1,6 +1,6 @@
 [package]
 name = "elanfp-notify"
-version = "0.1.1"
+version = "0.1.2"
 description = "Показывает в сеансе рабочего стола, что у службы elanfpd запросили отпечаток хозяина"
 edition.workspace = true
 license.workspace = true

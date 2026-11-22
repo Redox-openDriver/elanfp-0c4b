@@ -1,6 +1,6 @@
 [package]
 name = "elanfp-engine"
-version = "0.1.1"
+version = "0.1.2"
 description = "elanfp: касания, регистрация, проверка и хранилище шаблонов — без привязки к ОС"
 edition.workspace = true
 license.workspace = true

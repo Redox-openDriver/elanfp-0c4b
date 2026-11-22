@@ -376,11 +376,11 @@ dependencies = [
 
 [[package]]
 name = "elanfp-core"
-version = "0.1.1"
+version = "0.1.2"
 
 [[package]]
 name = "elanfp-engine"
-version = "0.1.1"
+version = "0.1.2"
 dependencies = [
  "drv-i18n",
  "elanfp-core",
@@ -391,7 +391,7 @@ dependencies = [
 
 [[package]]
 name = "elanfp-fprintd"
-version = "0.1.1"
+version = "0.1.2"
 dependencies = [
  "async-lock",
  "blocking",
@@ -403,14 +403,14 @@ dependencies = [
 
 [[package]]
 name = "elanfp-ipc"
-version = "0.1.1"
+version = "0.1.2"
 dependencies = [
  "libc",
 ]
 
 [[package]]
 name = "elanfp-linux"
-version = "0.1.1"
+version = "0.1.2"
 dependencies = [
  "drv-i18n",
  "elanfp-core",
@@ -423,7 +423,7 @@ dependencies = [
 
 [[package]]
 name = "elanfp-notify"
-version = "0.1.1"
+version = "0.1.2"
 dependencies = [
  "elanfp-engine",
  "elanfp-ipc",
@@ -768,7 +768,7 @@ dependencies = [
 
 [[package]]
 name = "pam-elanfp"
-version = "0.1.1"
+version = "0.1.2"
 dependencies = [
  "elanfp-ipc",
  "libc",
