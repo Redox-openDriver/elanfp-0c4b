@@ -273,7 +273,11 @@ fn only_directories_that_root_alone_can_change_are_trusted() {
     assert!(!trusted(Path::new("/tmp")));
     assert!(!trusted(Path::new("")));
     assert!(!trusted(Path::new("/no/such/directory")));
-    assert!(!trusted(&dir.join("link")));
+    assert_eq!(trusted(&dir.join("link")), root);
+    if root {
+        std::os::unix::fs::lchown(dir.join("link"), Some(65534), Some(65534)).unwrap();
+        assert!(!trusted(&dir.join("link")));
+    }
     assert!(!trusted(&dir.join("open")));
     assert_eq!(trusted(&dir.join("own")), root);
     let mut sleeper = Command::new("sleep").arg("30").spawn().unwrap();
