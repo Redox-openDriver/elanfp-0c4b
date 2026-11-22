@@ -1,7 +1,7 @@
 use std::os::fd::AsRawFd;
 use std::os::unix::net::UnixStream;
 
-pub use elanfp_ipc::{Peer, account_exists, harden_process, peer, peer_uid, uid_of};
+pub use elanfp_ipc::{Peer, account_exists, harden_process, name_of, peer, peer_uid, uid_of};
 
 pub fn current_uid() -> u32 {
     unsafe { libc::getuid() }

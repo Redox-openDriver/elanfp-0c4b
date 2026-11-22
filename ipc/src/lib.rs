@@ -4,7 +4,7 @@ use std::io::{BufRead, BufReader, Read, Write};
 mod socket;
 
 #[cfg(target_os = "linux")]
-pub use socket::{Bounded, Peer, SYSTEM_SOCKET, account_exists, call, connect, exchange, harden_process, peer, peer_uid, uid_of, user_socket};
+pub use socket::{Bounded, Peer, SYSTEM_SOCKET, account_exists, call, connect, exchange, harden_process, name_of, peer, peer_uid, uid_of, user_socket};
 
 pub const MAX_REQUEST: usize = 256;
 pub const MAX_REPLY_LINE: usize = 4096;

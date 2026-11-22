@@ -101,6 +101,17 @@ pub fn uid_of(name: &str) -> Option<u32> {
     (rc == 0 && !found.is_null()).then_some(entry.pw_uid)
 }
 
+pub fn name_of(uid: u32) -> Option<String> {
+    let mut buffer = vec![0 as libc::c_char; ACCOUNT_BUFFER];
+    let mut entry: libc::passwd = unsafe { std::mem::zeroed() };
+    let mut found: *mut libc::passwd = std::ptr::null_mut();
+    let rc = unsafe { libc::getpwuid_r(uid, &mut entry, buffer.as_mut_ptr(), buffer.len(), &mut found) };
+    if rc != 0 || found.is_null() || entry.pw_name.is_null() {
+        return None;
+    }
+    Some(unsafe { std::ffi::CStr::from_ptr(entry.pw_name) }.to_string_lossy().into_owned())
+}
+
 pub fn account_exists(uid: u32) -> bool {
     let mut buffer = vec![0 as libc::c_char; ACCOUNT_BUFFER];
     let mut entry: libc::passwd = unsafe { std::mem::zeroed() };
