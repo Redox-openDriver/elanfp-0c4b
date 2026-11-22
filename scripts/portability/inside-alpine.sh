@@ -113,6 +113,18 @@ bridge_refuses_verify_without_a_console() {
   dbus-send --system --print-reply --dest=net.reactivated.Fprint /net/reactivated/Fprint/Device/0 net.reactivated.Fprint.Device.VerifyStart string:any 2>&1 | grep -q 'ClaimDevice'
 }
 
+copy=/work/elanfp-0c4b
+rm -rf "$copy"
+mkdir -p "$copy"
+for entry in "$repo"/* "$repo"/.[!.]*; do
+  [ -e "$entry" ] || continue
+  case ${entry##*/} in target | .git) continue ;; esac
+  cp -R "$entry" "$copy/"
+done
+chown -R root:root "$copy"
+chmod -R go-w "$copy"
+dist=$copy/linux/dist
+
 step "OpenRC"
 mkdir -p /run/openrc
 touch /run/openrc/softlevel
