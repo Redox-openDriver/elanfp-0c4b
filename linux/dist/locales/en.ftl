@@ -9,6 +9,7 @@ setup-bad-pcrs = ELANFP_TPM2_PCRS must look like 7 or 7+11
 setup-no-cargo = cargo is required to build the driver
 setup-pcrs-need-tpm = ELANFP_TPM2_PCRS needs systemd-creds and a TPM 2.0
 setup-no-artifact = build output { $path } is missing
+setup-unsafe-build = { $path } can be changed by someone else, so nothing is installed from it: build in a folder only you can write to
 setup-key-lost = templates exist in { $state } but the key { $key } is gone: they cannot be decrypted any more
 setup-key-lost-advice = restore the key from a backup, or remove the templates with uninstall.sh --purge and enroll again
 setup-service-failed = the elanfpd service did not start under { $manager }: check its log

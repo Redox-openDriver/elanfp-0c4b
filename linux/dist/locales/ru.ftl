@@ -9,6 +9,7 @@ setup-bad-pcrs = ELANFP_TPM2_PCRS должен выглядеть как 7 ил�
 setup-no-cargo = для сборки драйвера нужен cargo
 setup-pcrs-need-tpm = для ELANFP_TPM2_PCRS нужны systemd-creds и TPM 2.0
 setup-no-artifact = нет результата сборки { $path }
+setup-unsafe-build = { $path } может изменить кто-то другой, поэтому из него ничего не ставится: собери в папке, куда можешь писать только ты
 setup-key-lost = в { $state } есть шаблоны, а ключа { $key } нет: расшифровать их больше нельзя
 setup-key-lost-advice = восстанови ключ из резервной копии либо удали шаблоны через uninstall.sh --purge и зарегистрируй пальцы заново
 setup-service-failed = служба elanfpd не запустилась под { $manager }: посмотри её журнал

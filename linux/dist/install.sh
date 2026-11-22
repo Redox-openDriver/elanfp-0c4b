@@ -147,10 +147,24 @@ if [ "$bridge" = yes ] && [ ! -S /run/dbus/system_bus_socket ] && [ ! -S /var/ru
   bridge=absent
 fi
 
-cargo build --release --locked -p elanfp-linux -p pam-elanfp -p elanfp-fprintd -p elanfp-notify
-built=$(cargo metadata --no-deps --format-version 1 | sed -n 's/.*"target_directory":"\([^"]*\)".*/\1/p')/release
+target=$(pwd)/target
+cargo build --release --locked --target-dir "$target" -p elanfp-linux -p pam-elanfp -p elanfp-fprintd -p elanfp-notify
+built=$target/release
+me=$(id -u)
+for owned in . "$target" "$built"; do
+  case $(stat -c '%u %a' "$owned" 2>/dev/null) in
+    "$me "*[2367]? | "$me "*[2367] | "0 "*[2367]? | "0 "*[2367]) fail setup-unsafe-build path="$owned" ;;
+    "$me "* | "0 "*) ;;
+    *) fail setup-unsafe-build path="$owned" ;;
+  esac
+done
 for artifact in elanfpd elanfp elanfp-fprintd elanfp-notify libpam_elanfp.so; do
-  [ -f "$built/$artifact" ] || fail setup-no-artifact path="$built/$artifact"
+  [ -f "$built/$artifact" ] && [ ! -L "$built/$artifact" ] || fail setup-no-artifact path="$built/$artifact"
+  case $(stat -c '%u %a' "$built/$artifact") in
+    "$me "*[2367]? | "$me "*[2367]) fail setup-unsafe-build path="$built/$artifact" ;;
+    "$me "*) ;;
+    *) fail setup-unsafe-build path="$built/$artifact" ;;
+  esac
 done
 
 if [ "$seal" = tpm ]; then

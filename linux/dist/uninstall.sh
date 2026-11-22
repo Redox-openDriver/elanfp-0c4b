@@ -75,9 +75,10 @@ if [ "$mode" = --bridge ]; then
   exit 0
 fi
 
-if as_root grep -qs pam_elanfp /etc/pam.d/*; then
+pam_users=$(as_root grep -rls pam_elanfp /etc/pam.d /etc/pam.conf /usr/lib/pam.d /usr/etc/pam.d /lib/pam.d 2>/dev/null || true)
+if [ -n "$pam_users" ]; then
   say remove-pam-first >&2
-  as_root grep -ls pam_elanfp /etc/pam.d/* >&2
+  printf '%s\n' "$pam_users" >&2
   exit 1
 fi
 
