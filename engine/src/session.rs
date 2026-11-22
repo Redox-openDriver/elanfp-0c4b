@@ -77,6 +77,7 @@ pub struct Session<T: Transport> {
     dim: SensorDim,
     base: FingerFrame,
     timing: Timing,
+    lift_pending: bool,
 }
 
 pub fn sensor_fail<T: Transport>(command: &'static str) -> impl FnOnce(Error<T::Error>) -> Fail
@@ -145,7 +146,7 @@ where
             }
             report.rest(timing.base_retry);
         }
-        Ok(Session { sensor, identity, dim, base, timing })
+        Ok(Session { sensor, identity, dim, base, timing, lift_pending: false })
     }
 
     pub fn identity(&self) -> &Identity {
@@ -213,7 +214,7 @@ where
         }
     }
 
-    fn wait_release(&mut self, report: &mut dyn Reporter) -> Result<(), BoxError> {
+    fn wait_release(&mut self, report: &mut dyn Reporter) -> Result<bool, BoxError> {
         let deadline = Instant::now() + self.timing.release_limit;
         if let Detect::Sensor = self.timing.detect {
             self.sensor.start_wait_release().map_err(sensor_fail::<T>("40 3e"))?;
@@ -235,12 +236,18 @@ where
                 if released {
                     report.presence(Presence::Away);
                 }
-                return if gone { Err(Fail::new("client-gone").into()) } else { Ok(()) };
+                return if gone { Err(Fail::new("client-gone").into()) } else { Ok(released) };
             }
         }
     }
 
     pub fn touch(&mut self, report: &mut dyn Reporter, wait: Duration) -> Result<Touch, BoxError> {
+        if self.lift_pending {
+            if self.coverage_now()? > RELEASED_COVERAGE && !self.wait_release(report)? {
+                return Ok(Touch::Timeout);
+            }
+            self.lift_pending = false;
+        }
         let finger = match self.wait_finger(report, wait)? {
             Some(finger) => finger,
             None => return Ok(Touch::Timeout),
@@ -281,7 +288,7 @@ where
         let told = report.say(Msg::new("touch-lift"));
         let released = self.wait_release(report);
         told?;
-        released?;
+        self.lift_pending = !released?;
         Ok(match accepted {
             Some((frame, verdict)) => Touch::Accepted { frame, verdict, trace },
             None => {
@@ -379,6 +386,19 @@ mod tests {
         assert_eq!(frame.as_slice(), finger_frame(6).as_slice());
         assert_eq!((log.sent(&cmd::WAIT_FINGER), log.sent(&cmd::WAIT_RELEASE)), (0, 0));
         assert!(matches!(session.touch(&mut report, WAIT).unwrap(), Touch::Timeout));
+    }
+
+    #[test]
+    fn a_finger_held_past_the_lift_limit_is_not_taken_for_a_new_touch() {
+        let mut report = Recorder::default();
+        let mut fake = FakeSensor::with_touches(&[4, 4]);
+        fake.held_on_release = 1_000_000;
+        let log = fake.log.clone();
+        let mut session = open(fake, &mut report);
+        assert!(matches!(session.touch(&mut report, Duration::from_secs(5)).unwrap(), Touch::Accepted { .. }));
+        assert!(session.lift_pending);
+        assert!(matches!(session.touch(&mut report, Duration::from_secs(5)).unwrap(), Touch::Timeout));
+        assert_eq!(log.sent(&cmd::WAIT_FINGER), 1, "no second wait for a finger that never lifted");
     }
 
     #[test]

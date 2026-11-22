@@ -90,6 +90,7 @@ pub struct FakeSensor {
     pub frames_mode: bool,
     pub stale_image: Vec<u8>,
     pub stale_reply: Option<Vec<u8>>,
+    pub held_on_release: usize,
     image_requested: bool,
     held_reads: usize,
     lifted_reads: usize,
@@ -153,6 +154,7 @@ impl FakeSensor {
             frames_mode: false,
             stale_image: Vec::new(),
             stale_reply: None,
+            held_on_release: 0,
             image_requested: false,
             held_reads: 0,
             lifted_reads: LIFTED_READS,
@@ -276,6 +278,10 @@ impl Transport for FakeSensor {
                             self.touches.pop_front();
                         }
                         vec![status]
+                    }
+                    Pending::Release if self.held_on_release > 0 => {
+                        self.held_on_release -= 1;
+                        return Err(Fault::Timeout);
                     }
                     Pending::Release => {
                         self.pending = Pending::Nothing;
